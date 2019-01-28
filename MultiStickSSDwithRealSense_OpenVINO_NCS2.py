@@ -2,7 +2,7 @@ import sys
 if sys.version_info.major < 3 or sys.version_info.minor < 4:
     print("Please using python3.4 or greater!")
     sys.exit(1)
-import pyrealsense2 as rs
+#import pyrealsense2 as rs
 import numpy as np
 import cv2, io, time, argparse, re
 from os import system
@@ -26,7 +26,7 @@ detectframecount = 0
 time1 = 0
 time2 = 0
 cam = None
-camera_mode = 0
+camera_mode = 1
 camera_width = 320
 camera_height = 240
 window_name = ""
@@ -65,7 +65,7 @@ def camThread(LABELS, results, frameBuffer, camera_mode, camera_width, camera_he
     # Configure depth and color streams
     #  Or
     # Open USB Camera streams
-    if camera_mode == 0:
+    """if camera_mode == 0:
         pipeline = rs.pipeline()
         config = rs.config()
         config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, vidfps)
@@ -77,14 +77,15 @@ def camThread(LABELS, results, frameBuffer, camera_mode, camera_width, camera_he
         align = rs.align(align_to)
         window_name = "RealSense"
     elif camera_mode == 1:
-        cam = cv2.VideoCapture(0)
-        if cam.isOpened() != True:
-            print("USB Camera Open Error!!!")
-            sys.exit(0)
-        cam.set(cv2.CAP_PROP_FPS, vidfps)
-        cam.set(cv2.CAP_PROP_FRAME_WIDTH, camera_width)
-        cam.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_height)
-        window_name = "USB Camera"
+    """
+    cam = cv2.VideoCapture(0)
+    if cam.isOpened() != True:
+        print("USB Camera Open Error!!!")
+        sys.exit(0)
+    cam.set(cv2.CAP_PROP_FPS, vidfps)
+    cam.set(cv2.CAP_PROP_FRAME_WIDTH, camera_width)
+    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_height)
+    window_name = "USB Camera"
 
     cv2.namedWindow(window_name, cv2.WINDOW_AUTOSIZE)
 
@@ -106,7 +107,7 @@ def camThread(LABELS, results, frameBuffer, camera_mode, camera_width, camera_he
             color_image = np.asanyarray(color_frame.get_data())
 
         elif camera_mode == 1:
-            # USB Camera Stream Read
+        # USB Camera Stream Read
             s, color_image = cam.read()
             if not s:
                 continue
